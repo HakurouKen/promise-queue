@@ -1,16 +1,16 @@
 # promise-queue
-A queue use for promises.
+promise 队列
 
 ## Usage
 
-Use queue to limit the number of promise (the async function that return promise) executing at the same time. For example, multi-thread download.
+利用队列，限制同一时间执行的 promise （返回promise 的异步函数）数量，例如多线程下载。
 
 ## Example
 
-### Infinity Queue
+### 无穷队列
 ```javascript
 
-// A factory products promiseGenerator, use for test.
+// 用于测试的 promise 生成工厂
 function PromiseGeneratorFactory(time){
     return function(){
         return new Promise(function(resolve,reject){
@@ -20,31 +20,31 @@ function PromiseGeneratorFactory(time){
 }
 
 let Queue = require('promise-queue');
-// set the max promise-resolver as 3 at the same time.
+// 同一时间内，队列最多同时执行 3 个函数
 let queue = new Queue(3);
 
 queue.push(PromiseGeneratorFactory(100)).then(console.log);
 queue.push(PromiseGeneratorFactory(200)).then(console.log);
 queue.push(PromiseGeneratorFactory(300)).then(console.log);
-// the next generator will wait until one of promise above is resolved.
+// 下一个生成器不会被调用，会进入队列
 queue.push(PromiseGeneratorFactory(400)).then(console.log);
-// the next generator will cut in the queue.
+// 下一个生成器将插入队列最前方
 queue.unshift(PromiseGeneratorFactory(400)).then(console.log);
 ```
 
-### Limited Queue
+### 有限队列
 ```javascript
 
 let Queue = require('promise-queue');
-// set the max promise-resolver as 2 at the same time, and two promise-resolver at most.
+// 限制同一时间最多执行两个函数 ，队列中最多有两个函数在排队
 let queue = new Queue(2,2);
 
 queue.push(PromiseGeneratorFactory(100)).then(console.log);
 queue.push(PromiseGeneratorFactory(200)).then(console.log);
-// next two promiseGenerator will queue until promises above finished.
+// 下面两个 promise 生成器进入排队队列
 queue.push(PromiseGeneratorFactory(300)).then(console.log);
 queue.push(PromiseGeneratorFactory(400)).then(console.log);
-// the next promiseGenerator will reject with error `Maximum queue size exceeded`.
+// 下一个生成器会 reject， 错误信息为 `Maximum queue size exceeded`.
 queue.push(PromiseGeneratorFactory(500)).catch(console.error);
 
 ```
