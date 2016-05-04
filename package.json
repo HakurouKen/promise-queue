@@ -1,0 +1,19 @@
+{
+  "name": "promise-queue",
+  "version": "1.0.0",
+  "description": "A queue use for promises.",
+  "main": "promise-queue.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/hakurouken/promise-queue/"
+  },
+  "keywords": [
+    "promise",
+    "queue"
+  ],
+  "author": "hakurouken",
+  "license": "MIT"
+}
