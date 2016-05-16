@@ -136,7 +136,7 @@ class Queue {
      * Internal method to recursive solve the queue.
      */
     _process(){
-        if (this._pending + 1 >= this.thread){
+        if (this._pending >= this.thread){
             return;
         }
 
@@ -152,11 +152,18 @@ class Queue {
                         .then(processor.resolver,processor.rejector);
 
         return always(chain,(ret)=>{
+            try{
                 this._pending--;
+                if( this._pending === 0 ){
+                    this._onclear.call(this,null);
+                }
                 this._finished++;
                 this._process();
                 return ret;
-            });
+            } catch(e) {
+                return Promise.reject(e);
+            }
+        });
     }
 }
 
