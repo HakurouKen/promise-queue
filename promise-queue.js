@@ -168,6 +168,14 @@ class Queue {
     }
 
     /**
+     * Get the length of queue.
+     * @return {Number} length of queue
+     */
+    getQueueLength(){
+        return this._queue.length;
+    }
+
+    /**
      * Define the callback when tasks are all cleared.
      * @param {Function} callback
      * @return {Function} callback itself.
