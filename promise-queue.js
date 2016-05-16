@@ -84,6 +84,7 @@ class Queue {
         this._pending = 0;
         this.thread = thread || 5;
         this.maxQuery = maxQuery || Infinity;
+        this._onclear = null;
     }
 
     /**
@@ -164,6 +165,19 @@ class Queue {
                 return Promise.reject(e);
             }
         });
+    }
+
+    /**
+     * Define the callback when tasks are all cleared.
+     * @param {Function} callback
+     * @return {Function} callback itself.
+     */
+    onClear(callback){
+        if( typeof callback !== 'function' ){
+            throw TypeError('Callback must be a function.');
+        }
+        this._onclear = callback;
+        return callback
     }
 }
 
